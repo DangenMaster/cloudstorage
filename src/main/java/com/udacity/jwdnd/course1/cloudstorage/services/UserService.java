@@ -17,12 +17,12 @@ public class UserService {
         this.hashService = hashService;
     }
 
-    public User getUser(String userName) {
-        return userMapper.getUser(userName);
+    public User getUser(String username) {
+        return userMapper.getUser(username);
     }
 
-    public boolean isUserNameAvailable(String userName) {
-        return userMapper.getUser(userName) == null;
+    public boolean isUserNameAvailable(String username) {
+        return userMapper.getUser(username) == null;
     }
 
     public int createUser(User user) {
@@ -33,7 +33,7 @@ public class UserService {
         String hashedPassword = hashService.getHashedValue(user.getPassword(), encodedSalt);
         return userMapper.createUser(new User(
                 null,
-                user.getUserName(),
+                user.getUsername(),
                 encodedSalt,
                 hashedPassword,
                 user.getFirstName(),
