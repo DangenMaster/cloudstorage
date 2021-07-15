@@ -9,11 +9,9 @@ import java.util.List;
 @Service
 public class NoteService {
     private NoteMapper noteMapper;
-    private UserService userService;
 
-    public NoteService(NoteMapper noteMapper, UserService userService) {
+    public NoteService(NoteMapper noteMapper) {
         this.noteMapper = noteMapper;
-        this.userService = userService;
     }
 
     public int createNote(Note note) {
