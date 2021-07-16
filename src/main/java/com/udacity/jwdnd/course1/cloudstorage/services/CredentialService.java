@@ -9,13 +9,24 @@ import java.util.List;
 @Service
 public class CredentialService {
     private CredentialMapper credentialMapper;
+    private EncryptionService encryptionService;
 
-    public CredentialService(CredentialMapper credentialMapper) {
+    public CredentialService(CredentialMapper credentialMapper, EncryptionService encryptionService) {
         this.credentialMapper = credentialMapper;
+        this.encryptionService = encryptionService;
     }
 
     public int insertCredential(Credential credential) {
-        return credentialMapper.insertCredential(credential);
+        String encodedKey = encryptionService.encodedKey();
+        String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), encodedKey);
+        return credentialMapper.insertCredential(new Credential(
+                null,
+                credential.getUrl(),
+                credential.getUsername(),
+                encodedKey,
+                encryptedPassword,
+                credential.getUserId()
+        ));
     }
 
     public List<Credential> getCredentials(int userId) {
@@ -27,6 +38,10 @@ public class CredentialService {
     }
 
     public int updateCredential(Credential credential) {
+        String encodedKey = encryptionService.encodedKey();
+        String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), encodedKey);
+        credential.setKey(encodedKey);
+        credential.setPassword(encryptedPassword);
         return credentialMapper.updateCredential(credential);
     }
 }
