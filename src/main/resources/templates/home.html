@@ -26,7 +26,7 @@
                 <div class="tab-content" id="nav-tabContent">
                     <!-- File content -->
                     <div class="tab-pane fade show active" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">
-                        <form action="#" th:action="@{/home/file}" enctype="multipart/form-data" method="POST">
+                        <form action="#" th:action="@{/file}" enctype="multipart/form-data" method="POST">
                             <div class="container">
                                 <div class="row" style="margin: 1em;">
                                     <div class="col-sm-2">
@@ -58,8 +58,8 @@
                                 <tbody>
                                 <tr th:each="file : ${files}">
                                     <td>
-                                        <a target="_blank" class="btn btn-success" th:href="@{/home/file/view/{fileId}(fileId=${file.fileId})}">View</a>
-                                        <a  class="btn btn-danger" th:href="@{/home/file/delete/{fileId}(fileId=${file.fileId})}">Delete</a>
+                                        <a target="_blank" class="btn btn-success" th:href="@{/file/view/{fileId}(fileId=${file.fileId})}">View</a>
+                                        <a  class="btn btn-danger" th:href="@{/file/delete/{fileId}(fileId=${file.fileId})}">Delete</a>
                                     </td>
                                     <th scope="row" th:text="${file.filename}">ExampleFile.txt</th>
                                 </tr>
@@ -90,7 +90,7 @@
                                                 class="btn btn-success"
                                                 th:onclick="showNoteModal([[${note.noteId}]],[[${note.noteTitle}]],[[${note.noteDescription}]])"
                                             >Edit</button>
-                                            <a class="btn btn-danger" th:href="@{/home/note/delete/{noteId}(noteId=${note.noteId})}">Delete</a>
+                                            <a class="btn btn-danger" th:href="@{/note/delete/{noteId}(noteId=${note.noteId})}">Delete</a>
                                         </td>
                                         <th scope="row" th:text="${note.noteTitle}">Example Note Title</th>
                                         <td th:text="${note.noteDescription}">Example Note Description </td>
@@ -109,7 +109,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="#" th:action="@{/home/note}" method="POST">
+                                        <form action="#" th:action="@{/note}" method="POST">
                                             <input type="hidden" name="noteId" id="note-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">Title</label>

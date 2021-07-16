@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 
 @Controller
+@RequestMapping("/file")
 public class FileController {
     private UserService userService;
     private FileService fileService;
@@ -31,7 +32,7 @@ public class FileController {
         this.fileService = fileService;
     }
 
-    @PostMapping("/home/file")
+    @PostMapping()
     public String insertFile(@RequestParam("fileUpload") MultipartFile fileUpload, Authentication authentication,
                              @ModelAttribute File file, RedirectAttributes redirectAttributes) throws IOException {
         try {
@@ -70,7 +71,7 @@ public class FileController {
         return "redirect:/home";
     }
 
-    @GetMapping("/home/file/view/{fileId}")
+    @GetMapping("/view/{fileId}")
     public ResponseEntity viewFile(@PathVariable("fileId") Integer fileId) {
         File file = fileService.getFile(fileId);
         String filename = file.getFilename();
@@ -83,7 +84,7 @@ public class FileController {
                 .body(file.getFileData());
     }
 
-    @GetMapping("/home/file/delete/{fileId}")
+    @GetMapping("/delete/{fileId}")
     public String deleteFile(@PathVariable int fileId, RedirectAttributes redirectAttributes) {
         try {
             fileService.deleteFile(fileId);
