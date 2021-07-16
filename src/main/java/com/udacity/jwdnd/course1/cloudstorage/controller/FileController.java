@@ -9,11 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 
@@ -29,7 +27,7 @@ public class FileController {
     }
 
     @PostMapping()
-    public RedirectView insertFile(@RequestParam("fileUpload") MultipartFile fileUpload, Authentication authentication,
+    public String insertFile(@RequestParam("fileUpload") MultipartFile fileUpload, Authentication authentication,
                                    @ModelAttribute File file, RedirectAttributes attr) throws IOException {
         String fileError = null;
         if (!fileService.isFilenameExist(fileUpload.getOriginalFilename())) {
@@ -50,14 +48,12 @@ public class FileController {
             attr.addAttribute("h", "fileError");
         }
 
-        return new RedirectView("/home");
+        return "redirect:/home";
     }
 
     @GetMapping("/view/{fileId}")
     public ResponseEntity viewFile(@PathVariable("fileId") Integer fileId) {
-
         File file = fileService.getFile(fileId);
-
         String filename = file.getFilename();
 
         return ResponseEntity.ok()
@@ -66,12 +62,11 @@ public class FileController {
                 instead of directly downloading files.*/
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+filename+"\"")
                 .body(file.getFileData());
-
     }
 
     @GetMapping("/delete/{fileId}")
-    public RedirectView deleteFile(@PathVariable int fileId, Model model) {
+    public String deleteFile(@PathVariable int fileId) {
         fileService.deleteFile(fileId);
-        return new RedirectView("/home");
+        return "redirect:/home";
     }
 }

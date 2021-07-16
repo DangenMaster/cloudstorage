@@ -6,9 +6,7 @@ import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("/credential")
@@ -22,7 +20,7 @@ public class CredentialController {
     }
 
     @PostMapping()
-    public RedirectView insertAndUpdateCredential(Authentication authentication, @ModelAttribute Credential credential, Model model) {
+    public String insertAndUpdateCredential(Authentication authentication, @ModelAttribute Credential credential) {
         if (credential.getCredentialId() == null) {
             final User loggedInUser = userService.getUser(authentication.getName());
             credential.setUserId(loggedInUser.getUserId());
@@ -30,13 +28,13 @@ public class CredentialController {
         } else { // update
             credentialService.updateCredential(credential);
         }
-        return new RedirectView("/home");
+        return "redirect:/home";
     }
 
     @GetMapping("/delete/{credentialId}")
-    public RedirectView deleteNote(@PathVariable int credentialId, Model model) {
+    public String deleteNote(@PathVariable int credentialId) {
         credentialService.deleteCredential(credentialId);
-        return new RedirectView("/home");
+        return "redirect:/home";
     }
 
 }
