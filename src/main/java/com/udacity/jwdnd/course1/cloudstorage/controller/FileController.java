@@ -4,6 +4,8 @@ import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,8 @@ import java.io.IOException;
 public class FileController {
     private UserService userService;
     private FileService fileService;
+
+    static private Logger logger = LoggerFactory.getLogger(FileController.class);
 
     public FileController(UserService userService, FileService fileService) {
         this.userService = userService;
@@ -59,7 +63,8 @@ public class FileController {
 
         } catch (IOException ex) {
             redirectAttributes.addAttribute("error", true);
-            redirectAttributes.addAttribute("message", ex.getMessage());
+            redirectAttributes.addAttribute("message", "Your changes were not saved. Please try again.");
+            logger.error("Error: insertFile", ex.getMessage());
         }
 
         return "redirect:/home";
@@ -86,7 +91,8 @@ public class FileController {
             redirectAttributes.addAttribute("message", "File deleted!");
         } catch (Exception ex) {
             redirectAttributes.addAttribute("error", true);
-            redirectAttributes.addAttribute("message", ex.getMessage());
+            redirectAttributes.addAttribute("message", "Your changes were not done. Please try again.");
+            logger.error("Error: deleteFile", ex.getMessage());
         }
 
         return "redirect:/home";

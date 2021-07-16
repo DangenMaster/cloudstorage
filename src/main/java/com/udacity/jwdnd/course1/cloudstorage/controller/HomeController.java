@@ -13,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -38,9 +37,7 @@ public class HomeController {
     }
 
     @GetMapping()
-    public String homePage(Authentication authentication,
-                           @RequestAttribute(value = "h", required = false) String home,
-                           Model model) {
+    public String homePage(Authentication authentication, Model model) {
         final User loggedInUser = userService.getUser(authentication.getName());
 
         List<File> files = fileService.getFiles(loggedInUser.getUserId());
