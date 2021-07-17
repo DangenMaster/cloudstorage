@@ -23,6 +23,7 @@ class CloudStorageApplicationTests {
 	private final String password = "qwerty@123";
 	private final String noteTitle = "Dummy note title";
 	private final String noteDescription = "Dummy note description";
+	private final String credentialUrl = "http://localhost:8080/home";
 
 	@BeforeAll
 	public static void beforeAll() {
@@ -51,28 +52,6 @@ class CloudStorageApplicationTests {
 
 	@Test
 	@Order(1)
-	public void displayLoginPage() {
-		driver.get(baseURL + "/login");
-
-		//Check that user has been redirected to login page
-		new WebDriverWait(driver,5).until(ExpectedConditions.titleIs("Login"));
-
-		Assertions.assertEquals("Login", driver.getTitle());
-	}
-
-	@Test
-	@Order(2)
-	public void  displaySignUpPage() {
-		driver.get(baseURL + "/signup");
-
-		//Check that user has been redirected to signup page
-		new WebDriverWait(driver,5).until(ExpectedConditions.titleIs("Sign Up"));
-
-		Assertions.assertEquals("Sign Up", driver.getTitle());
-	}
-
-	@Test
-	@Order(3)
 	public void  unauthorizedAccessRestrictions() throws InterruptedException {
 		driver.get(baseURL + "/home");
 
@@ -83,7 +62,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	@Order(4)
+	@Order(2)
 	public void  invalidCredentials() throws InterruptedException {
 		driver.get(baseURL + "/login");
 
@@ -105,7 +84,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	@Order(5)
+	@Order(3)
 	public void  userSignUpAndUsernameAvailability() throws InterruptedException {
 		driver.get(baseURL + "/signup");
 
@@ -143,7 +122,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	@Order(6)
+	@Order(4)
 	public void userLoginAndLogout() throws InterruptedException {
 		driver.get(baseURL + "/login");
 
@@ -169,7 +148,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	@Order(7)
+	@Order(5)
 	public void userLoginAndAllUploadFileCases() throws InterruptedException {
 		driver.get(baseURL + "/login");
 
@@ -253,7 +232,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	@Order(8)
+	@Order(6)
 	public void allUploadNoteCases() throws InterruptedException {
 		driver.get(baseURL + "/login");
 
@@ -343,5 +322,102 @@ class CloudStorageApplicationTests {
 		Thread.sleep(2000);
 
 		Assertions.assertEquals(false, notesPage.isFirstNoteListElementDisplayed());
+	}
+
+	@Test
+	@Order(7)
+	public void allUploadCredentialCases() throws InterruptedException {
+		driver.get(baseURL + "/login");
+
+		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Login"));
+		Assertions.assertEquals("Login", driver.getTitle());
+
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.fillLoginForm(username, password);
+		loginPage.submitLoginForm();
+
+		Thread.sleep(2000);
+
+		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Home"));
+		Assertions.assertEquals("Home", driver.getTitle());
+
+		CredentialsPage credentialsPage = new CredentialsPage(driver);
+		credentialsPage.clickCredentialsTab();
+
+		Thread.sleep(2000);
+
+		// Submit note
+		credentialsPage.clickCredentialModelButton();
+
+		Thread.sleep(2000);
+
+		credentialsPage.fillCredentialModel(credentialUrl, username, password);
+		credentialsPage.submitCredential();
+
+		Thread.sleep(2000);
+
+		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Home"));
+		Assertions.assertEquals("Home", driver.getTitle());
+		Assertions.assertEquals(true, credentialsPage.isSuccessMessageDisplayed());
+
+		Thread.sleep(2000);
+
+		credentialsPage.clickCredentialsTab();
+
+		Thread.sleep(2000);
+
+		Assertions.assertEquals(true, credentialsPage.isFirstCredentialListElementDisplayed());
+
+		Thread.sleep(2000);
+
+		// Edit note
+		credentialsPage.clickEditFirstCredentialButton();
+
+		Thread.sleep(2000);
+
+		Assertions.assertEquals(credentialUrl, credentialsPage.getCredentialUrl());
+		Assertions.assertEquals(username, credentialsPage.getCredentialUsername());
+		Assertions.assertEquals(password, credentialsPage.getCredentialPassword());
+
+		Thread.sleep(2000);
+
+		credentialsPage.fillCredentialModel("/new", "_apoorv", "!!");
+
+		Thread.sleep(2000);
+
+		credentialsPage.submitCredential();
+
+		Thread.sleep(2000);
+
+		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Home"));
+		Assertions.assertEquals("Home", driver.getTitle());
+		Assertions.assertEquals(true, credentialsPage.isSuccessMessageDisplayed());
+
+		Thread.sleep(2000);
+
+		credentialsPage.clickCredentialsTab();
+
+		Thread.sleep(2000);
+
+		Assertions.assertEquals(true, credentialsPage.isFirstCredentialListElementDisplayed());
+
+		Thread.sleep(2000);
+
+		// Delete note
+		credentialsPage.clickDeleteFirstCredentialButton();
+
+		Thread.sleep(2000);
+
+		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Home"));
+		Assertions.assertEquals("Home", driver.getTitle());
+		Assertions.assertEquals(true, credentialsPage.isSuccessMessageDisplayed());
+
+		Thread.sleep(2000);
+
+		credentialsPage.clickCredentialsTab();
+
+		Thread.sleep(2000);
+
+		Assertions.assertEquals(false, credentialsPage.isFirstCredentialListElementDisplayed());
 	}
 }

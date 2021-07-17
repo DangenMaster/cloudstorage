@@ -53,7 +53,7 @@ public class CredentialController {
         try {
             credentialService.deleteCredential(credentialId);
             redirectAttributes.addAttribute("success", true);
-            redirectAttributes.addAttribute("message", "Credentials has been updated!");
+            redirectAttributes.addAttribute("message", "Credentials has been deleted!");
         } catch (Exception ex) {
             redirectAttributes.addAttribute("error", true);
             redirectAttributes.addAttribute("message", "Your changes were not done. Please try again.");
