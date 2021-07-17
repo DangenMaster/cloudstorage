@@ -36,7 +36,7 @@
                                         <input type="file" class="form-control-file" id="fileUpload" name="fileUpload">
                                     </div>
                                     <div class="col-sm-4">
-                                        <button type="submit" class="btn btn-dark">Upload</button>
+                                        <button type="submit" class="btn btn-dark" id="fileUploadButton">Upload</button>
                                     </div>
                                 </div>
                             </div>
@@ -56,10 +56,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="file : ${files}">
+                                <tr th:each="file : ${files}" th:id="${'file-' + file.fileId}">
                                     <td>
-                                        <a target="_blank" class="btn btn-success" th:href="@{/file/view/{fileId}(fileId=${file.fileId})}">View</a>
-                                        <a  class="btn btn-danger" th:href="@{/file/delete/{fileId}(fileId=${file.fileId})}">Delete</a>
+                                        <a target="_blank" class="btn btn-success" th:id="${'viewFile-' + file.fileId}" th:href="@{/file/view/{fileId}(fileId=${file.fileId})}">View</a>
+                                        <a  class="btn btn-danger" th:id="${'deleteFile-' + file.fileId}" th:href="@{/file/delete/{fileId}(fileId=${file.fileId})}">Delete</a>
                                     </td>
                                     <th scope="row" th:text="${file.filename}">ExampleFile.txt</th>
                                 </tr>

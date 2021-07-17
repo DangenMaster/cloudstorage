@@ -24,7 +24,7 @@ class CloudStorageApplicationTests {
 
 	@BeforeAll
 	public static void beforeAll() {
-		System.setProperty("webdriver.chrome.driver", "E:\\Software\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "src\\main\\resources\\static\\drivers\\chromedriver.exe");
 	}
 
 	@AfterAll
@@ -125,7 +125,7 @@ class CloudStorageApplicationTests {
 			new WebDriverWait(driver,5).until(ExpectedConditions.titleIs("Sign Up"));
 			Assertions.assertEquals("Sign Up", driver.getTitle());
 
-			if (i == 0) { // Signup successfully as username is available
+			if (i == 0) { // SignUp successfully as username is available
 				Assertions.assertEquals(true, signUpPage.isSuccessMessageDisplayed());
 			} else { // username is not available
 				Assertions.assertEquals(true, signUpPage.isErrorMessageDisplayed());
@@ -146,15 +146,95 @@ class CloudStorageApplicationTests {
 		loginPage.submitLoginForm();
 
 		Thread.sleep(2000);
-		
+
 		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Home"));
 		Assertions.assertEquals("Home", driver.getTitle());
 
 		HomePage homePage = new HomePage(driver);
 		homePage.clickLogoutButton();
 
+		Thread.sleep(2000);
+
 		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Login"));
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
+	@Test
+	@Order(7)
+	public void userLoginAndAllUploadFileCases() throws InterruptedException {
+		driver.get(baseURL + "/login");
+
+		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Login"));
+		Assertions.assertEquals("Login", driver.getTitle());
+
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.fillLoginForm(username, password);
+		loginPage.submitLoginForm();
+
+		Thread.sleep(2000);
+
+		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Home"));
+		Assertions.assertEquals("Home", driver.getTitle());
+
+		FilesPage filesPage = new FilesPage(driver);
+
+		// No file selected
+		filesPage.uploadFile();
+
+		Thread.sleep(2000);
+		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Home"));
+
+		Assertions.assertEquals("Home", driver.getTitle());
+		Assertions.assertEquals(true, filesPage.isErrorMessageDisplayed());
+		Assertions.assertEquals(false, filesPage.isFirstFileListElementDisplayed());
+
+		// New file upload
+		filesPage.chooseFile();
+		filesPage.uploadFile();
+
+		Thread.sleep(2000);
+		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Home"));
+
+		Assertions.assertEquals("Home", driver.getTitle());
+		Assertions.assertEquals(true, filesPage.isSuccessMessageDisplayed());
+		Assertions.assertEquals(true, filesPage.isFirstFileListElementDisplayed());
+
+		// Existing file upload
+		filesPage.chooseFile();
+		filesPage.uploadFile();
+
+		Thread.sleep(2000);
+		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Home"));
+
+		Assertions.assertEquals("Home", driver.getTitle());
+		Assertions.assertEquals(true, filesPage.isErrorMessageDisplayed());
+
+		// Max file size exceeds of 1MB
+		filesPage.chooseLargeFile();
+		filesPage.uploadFile();
+
+		Thread.sleep(2000);
+		new WebDriverWait(driver, 10).until(ExpectedConditions.titleIs("Home"));
+
+		Assertions.assertEquals("Home", driver.getTitle());
+		Assertions.assertEquals(true, filesPage.isErrorMessageDisplayed());
+
+		// download file (need to verify manually if files gets downloaded)
+		filesPage.clickViewFirstFileListElement();
+
+		Thread.sleep(2000);
+		new WebDriverWait(driver, 10).until(ExpectedConditions.titleIs("Home"));
+
+		Assertions.assertEquals("Home", driver.getTitle());
+
+		// delete file
+		filesPage.clickDeleteFirstFileListElement();
+
+		Thread.sleep(2000);
+		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Home"));
+
+		Assertions.assertEquals("Home", driver.getTitle());
+		Assertions.assertEquals(true, filesPage.isSuccessMessageDisplayed());
+		Assertions.assertEquals(false, filesPage.isFirstFileListElementDisplayed());
+	}
 }
