@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
@@ -14,6 +15,9 @@ public class LoginPage {
 
     @FindBy(xpath = "//button[@type='submit']")
     private WebElement submitButton;
+
+    @FindBy(id = "success-msg")
+    private WebElement signupSuccessMessage;
 
     @FindBy(id = "error-msg")
     private WebElement errorMessage;
@@ -39,6 +43,10 @@ public class LoginPage {
 
     public void goToSignUpPage() {
         signUpPageLink.click();
+    }
+
+    public boolean isSignupSuccessMessageDisplayed() {
+        return signupSuccessMessage.isDisplayed();
     }
 
     public boolean isErrorMessageDisplayed() {

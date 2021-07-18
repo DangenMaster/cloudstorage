@@ -52,7 +52,7 @@ class CloudStorageApplicationTests {
 
 	@Test
 	@Order(1)
-	public void  unauthorizedAccessRestrictions() throws InterruptedException {
+	public void  unauthorizedAccessRestrictionsAndInvalidCredentials() throws InterruptedException {
 		driver.get(baseURL + "/home");
 
 		Thread.sleep(2000);
@@ -61,22 +61,11 @@ class CloudStorageApplicationTests {
 		new WebDriverWait(driver,5).until(ExpectedConditions.titleIs("Login"));
 
 		Assertions.assertEquals("Login", driver.getTitle());
-	}
-
-	@Test
-	@Order(2)
-	public void  invalidCredentials() throws InterruptedException {
-		driver.get(baseURL + "/login");
-
-		//Check that user has been redirected to login page
-		new WebDriverWait(driver,5).until(ExpectedConditions.titleIs("Login"));
-
-		Assertions.assertEquals("Login", driver.getTitle());
-
-		//Initialize web driver
-		LoginPage loginPage = new LoginPage(driver);
 
 		Thread.sleep(2000);
+
+		// verify for invalid credentials
+		LoginPage loginPage = new LoginPage(driver);
 
 		loginPage.fillLoginForm(username, password);
 
@@ -90,7 +79,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	@Order(3)
+	@Order(2)
 	public void  userSignUpLoginAndLogout() throws InterruptedException {
 		driver.get(baseURL + "/signup");
 
@@ -106,36 +95,17 @@ class CloudStorageApplicationTests {
 
 		Thread.sleep(2000);
 
-		for (int i = 0; i < 2; i++) {
-			signUpPage.fillSignUpForm(firstName, lastName, username, password);
-
-			Thread.sleep(2000);
-
-			signUpPage.submitSignUpForm();
-
-			Thread.sleep(2000);
-
-			//Check that user has been redirected to signup page
-			new WebDriverWait(driver,5).until(ExpectedConditions.titleIs("Sign Up"));
-			Assertions.assertEquals("Sign Up", driver.getTitle());
-
-			Thread.sleep(2000);
-
-			if (i == 0) { // SignUp successfully as username is available
-				Assertions.assertEquals(true, signUpPage.isSuccessMessageDisplayed());
-			} else { // username is not available
-				Assertions.assertEquals(true, signUpPage.isErrorMessageDisplayed());
-			}
-		}
+		// verify if signUp is successful
+		signUpPage.fillSignUpForm(firstName, lastName, username, password);
 
 		Thread.sleep(2000);
 
-		// user login and logout
-		signUpPage.clickBackToLoginButton();
+		signUpPage.submitSignUpForm();
 
 		Thread.sleep(2000);
 
-		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Login"));
+		//Check that user has been redirected to login page
+		new WebDriverWait(driver,5).until(ExpectedConditions.titleIs("Login"));
 
 		Assertions.assertEquals("Login", driver.getTitle());
 
@@ -143,6 +113,11 @@ class CloudStorageApplicationTests {
 
 		Thread.sleep(2000);
 
+		Assertions.assertEquals(true, loginPage.isSignupSuccessMessageDisplayed());
+
+		Thread.sleep(2000);
+
+		// verify if login is successful
 		loginPage.fillLoginForm(username, password);
 
 		Thread.sleep(2000);
@@ -158,16 +133,58 @@ class CloudStorageApplicationTests {
 
 		Thread.sleep(2000);
 
+		// verify if logout is successful
 		homePage.clickLogoutButton();
 
 		Thread.sleep(2000);
 
 		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Login"));
 		Assertions.assertEquals("Login", driver.getTitle());
+
+		Thread.sleep(2000);
+
+		// verify that the home page is no longer accessible
+		driver.get(baseURL + "/home");
+
+		Thread.sleep(2000);
+
+		//Check that user has been redirected to login page
+		new WebDriverWait(driver,5).until(ExpectedConditions.titleIs("Login"));
+
+		Assertions.assertEquals("Login", driver.getTitle());
+
+		Thread.sleep(2000);
+
+		// verify if username is available
+		loginPage.goToSignUpPage();
+
+		Thread.sleep(2000);
+
+		//Check that user has been redirected to login page
+		new WebDriverWait(driver,5).until(ExpectedConditions.titleIs("Sign Up"));
+
+		Assertions.assertEquals("Sign Up", driver.getTitle());
+
+		signUpPage.fillSignUpForm(firstName, lastName, username, password);
+
+		Thread.sleep(2000);
+
+		signUpPage.submitSignUpForm();
+
+		Thread.sleep(2000);
+
+		//Check that user has been redirected to signUp page
+		new WebDriverWait(driver,5).until(ExpectedConditions.titleIs("Sign Up"));
+
+		Assertions.assertEquals("Sign Up", driver.getTitle());
+
+		Thread.sleep(2000);
+
+		Assertions.assertEquals(true, signUpPage.isErrorMessageDisplayed());
 	}
 
 	@Test
-	@Order(4)
+	@Order(3)
 	public void allUploadFileCases() throws InterruptedException {
 		driver.get(baseURL + "/login");
 
@@ -263,7 +280,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	@Order(5)
+	@Order(4)
 	public void allUploadNoteCases() throws InterruptedException {
 		driver.get(baseURL + "/login");
 
@@ -374,7 +391,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	@Order(6)
+	@Order(5)
 	public void allUploadCredentialCases() throws InterruptedException {
 		driver.get(baseURL + "/login");
 

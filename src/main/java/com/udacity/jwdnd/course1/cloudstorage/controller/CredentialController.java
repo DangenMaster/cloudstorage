@@ -33,11 +33,11 @@ public class CredentialController {
                 credential.setUserId(loggedInUser.getUserId());
                 credentialService.insertCredential(credential);
                 redirectAttributes.addAttribute("success", true);
-                redirectAttributes.addAttribute("message", "Credentials has been saved!");
+                redirectAttributes.addAttribute("message", "Credential has been saved!");
             } else { // update
                 credentialService.updateCredential(credential);
                 redirectAttributes.addAttribute("success", true);
-                redirectAttributes.addAttribute("message", "Credentials has been updated!");
+                redirectAttributes.addAttribute("message", "Credential has been updated!");
             }
         } catch (Exception ex) {
             redirectAttributes.addAttribute("error", true);
@@ -53,7 +53,7 @@ public class CredentialController {
         try {
             credentialService.deleteCredential(credentialId);
             redirectAttributes.addAttribute("success", true);
-            redirectAttributes.addAttribute("message", "Credentials has been deleted!");
+            redirectAttributes.addAttribute("message", "Credential has been deleted!");
         } catch (Exception ex) {
             redirectAttributes.addAttribute("error", true);
             redirectAttributes.addAttribute("message", "Your changes were not done. Please try again.");
