@@ -52,4 +52,8 @@ public class SignUpPage {
     public boolean isErrorMessageDisplayed() {
         return errorMessage.isDisplayed();
     }
+
+    public void clickBackToLoginButton() {
+        backToLogin.click();
+    }
 }

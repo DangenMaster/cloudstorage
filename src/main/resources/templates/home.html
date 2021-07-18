@@ -56,10 +56,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="file : ${files}" th:id="${'file-' + file.fileId}">
+                                <tr th:each="file : ${files}" class="files">
                                     <td>
-                                        <a target="_blank" class="btn btn-success" th:id="${'viewFile-' + file.fileId}" th:href="@{/file/view/{fileId}(fileId=${file.fileId})}">View</a>
-                                        <a  class="btn btn-danger" th:id="${'deleteFile-' + file.fileId}" th:href="@{/file/delete/{fileId}(fileId=${file.fileId})}">Delete</a>
+                                        <a target="_blank" class="btn btn-success view-file" th:href="@{/file/view/{fileId}(fileId=${file.fileId})}">View</a>
+                                        <a  class="btn btn-danger delete-file" th:href="@{/file/delete/{fileId}(fileId=${file.fileId})}">Delete</a>
                                     </td>
                                     <th scope="row" th:text="${file.filename}">ExampleFile.txt</th>
                                 </tr>
@@ -83,15 +83,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="note : ${notes}" th:id="${'note-' + note.noteId}">
+                                    <tr th:each="note : ${notes}" class="notes">
                                         <td>
                                             <button
                                                 type="button"
-                                                class="btn btn-success"
-                                                th:id="${'edit-note-' + note.noteId}"
+                                                class="btn btn-success edit-note"
                                                 th:onclick="showNoteModal([[${note.noteId}]],[[${note.noteTitle}]],[[${note.noteDescription}]])"
                                             >Edit</button>
-                                            <a class="btn btn-danger" th:id="${'delete-note-' + note.noteId}" th:href="@{/note/delete/{noteId}(noteId=${note.noteId})}">Delete</a>
+                                            <a class="btn btn-danger delete-note" th:href="@{/note/delete/{noteId}(noteId=${note.noteId})}">Delete</a>
                                         </td>
                                         <th scope="row" th:text="${note.noteTitle}">Example Note Title</th>
                                         <td th:text="${note.noteDescription}">Example Note Description </td>

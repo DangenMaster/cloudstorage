@@ -55,6 +55,8 @@ class CloudStorageApplicationTests {
 	public void  unauthorizedAccessRestrictions() throws InterruptedException {
 		driver.get(baseURL + "/home");
 
+		Thread.sleep(2000);
+
 		//Check that user has been redirected to login page
 		new WebDriverWait(driver,5).until(ExpectedConditions.titleIs("Login"));
 
@@ -74,8 +76,12 @@ class CloudStorageApplicationTests {
 		//Initialize web driver
 		LoginPage loginPage = new LoginPage(driver);
 
+		Thread.sleep(2000);
 
 		loginPage.fillLoginForm(username, password);
+
+		Thread.sleep(2000);
+
 		loginPage.submitLoginForm();
 
 		Thread.sleep(2000);
@@ -85,7 +91,7 @@ class CloudStorageApplicationTests {
 
 	@Test
 	@Order(3)
-	public void  userSignUpAndUsernameAvailability() throws InterruptedException {
+	public void  userSignUpLoginAndLogout() throws InterruptedException {
 		driver.get(baseURL + "/signup");
 
 		//Check that user has been redirected to signup page
@@ -97,6 +103,8 @@ class CloudStorageApplicationTests {
 
 		//Initialize web driver
 		SignUpPage signUpPage = new SignUpPage(driver);
+
+		Thread.sleep(2000);
 
 		for (int i = 0; i < 2; i++) {
 			signUpPage.fillSignUpForm(firstName, lastName, username, password);
@@ -119,18 +127,26 @@ class CloudStorageApplicationTests {
 				Assertions.assertEquals(true, signUpPage.isErrorMessageDisplayed());
 			}
 		}
-	}
 
-	@Test
-	@Order(4)
-	public void userLoginAndLogout() throws InterruptedException {
-		driver.get(baseURL + "/login");
+		Thread.sleep(2000);
+
+		// user login and logout
+		signUpPage.clickBackToLoginButton();
+
+		Thread.sleep(2000);
 
 		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Login"));
+
 		Assertions.assertEquals("Login", driver.getTitle());
 
 		LoginPage loginPage = new LoginPage(driver);
+
+		Thread.sleep(2000);
+
 		loginPage.fillLoginForm(username, password);
+
+		Thread.sleep(2000);
+
 		loginPage.submitLoginForm();
 
 		Thread.sleep(2000);
@@ -139,6 +155,9 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals("Home", driver.getTitle());
 
 		HomePage homePage = new HomePage(driver);
+
+		Thread.sleep(2000);
+
 		homePage.clickLogoutButton();
 
 		Thread.sleep(2000);
@@ -148,8 +167,8 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	@Order(5)
-	public void userLoginAndAllUploadFileCases() throws InterruptedException {
+	@Order(4)
+	public void allUploadFileCases() throws InterruptedException {
 		driver.get(baseURL + "/login");
 
 		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Login"));
@@ -229,10 +248,22 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals("Home", driver.getTitle());
 		Assertions.assertEquals(true, filesPage.isSuccessMessageDisplayed());
 		Assertions.assertEquals(false, filesPage.isFirstFileListElementDisplayed());
+
+		// logout
+		HomePage homePage = new HomePage(driver);
+
+		Thread.sleep(2000);
+
+		homePage.clickLogoutButton();
+
+		Thread.sleep(2000);
+
+		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Login"));
+		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
 	@Test
-	@Order(6)
+	@Order(5)
 	public void allUploadNoteCases() throws InterruptedException {
 		driver.get(baseURL + "/login");
 
@@ -259,6 +290,9 @@ class CloudStorageApplicationTests {
 		Thread.sleep(2000);
 
 		notesPage.fillNoteModel(noteTitle, noteDescription);
+
+		Thread.sleep(2000);
+
 		notesPage.submitNote();
 
 		Thread.sleep(2000);
@@ -288,6 +322,9 @@ class CloudStorageApplicationTests {
 		Thread.sleep(2000);
 
 		notesPage.fillNoteModel(" new", " new");
+
+		Thread.sleep(2000);
+
 		notesPage.submitNote();
 
 		Thread.sleep(2000);
@@ -322,10 +359,22 @@ class CloudStorageApplicationTests {
 		Thread.sleep(2000);
 
 		Assertions.assertEquals(false, notesPage.isFirstNoteListElementDisplayed());
+
+		// logout
+		HomePage homePage = new HomePage(driver);
+
+		Thread.sleep(2000);
+
+		homePage.clickLogoutButton();
+
+		Thread.sleep(2000);
+
+		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Login"));
+		Assertions.assertEquals("Login", driver.getTitle());
 	}
 
 	@Test
-	@Order(7)
+	@Order(6)
 	public void allUploadCredentialCases() throws InterruptedException {
 		driver.get(baseURL + "/login");
 
@@ -352,6 +401,9 @@ class CloudStorageApplicationTests {
 		Thread.sleep(2000);
 
 		credentialsPage.fillCredentialModel(credentialUrl, username, password);
+
+		Thread.sleep(2000);
+
 		credentialsPage.submitCredential();
 
 		Thread.sleep(2000);
@@ -419,5 +471,17 @@ class CloudStorageApplicationTests {
 		Thread.sleep(2000);
 
 		Assertions.assertEquals(false, credentialsPage.isFirstCredentialListElementDisplayed());
+
+		// logout
+		HomePage homePage = new HomePage(driver);
+
+		Thread.sleep(2000);
+
+		homePage.clickLogoutButton();
+
+		Thread.sleep(2000);
+
+		new WebDriverWait(driver, 5).until(ExpectedConditions.titleIs("Login"));
+		Assertions.assertEquals("Login", driver.getTitle());
 	}
 }

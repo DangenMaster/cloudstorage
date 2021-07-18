@@ -22,17 +22,17 @@ public class NotesPage {
     @FindBy(id = "submit-note")
     private WebElement submitNoteButton;
 
-    @FindBy(id = "note-1")
-    private WebElement firstNoteListElement;
-
-    @FindBy(id = "edit-note-1")
-    private WebElement editFirstNoteButton;
-
-    @FindBy(id = "delete-note-1")
-    private WebElement deleteFirstNoteButton;
-
     @FindBy(id = "success-message")
     private WebElement successMessage;
+
+    @FindBy(className = "notes")
+    private WebElement firstNoteListElement;
+
+    @FindBy(className = "edit-note")
+    private WebElement editFirstNoteButton;
+
+    @FindBy(className = "delete-note")
+    private WebElement deleteFirstNoteButton;
 
     public NotesPage(ChromeDriver driver) {
         PageFactory.initElements(driver, this);

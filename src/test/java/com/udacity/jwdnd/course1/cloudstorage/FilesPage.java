@@ -21,13 +21,13 @@ public class FilesPage {
     @FindBy(id = "error-message")
     private WebElement errorMessage;
 
-    @FindBy(id = "file-1")
+    @FindBy(className = "files")
     private WebElement firstFileListElement;
 
-    @FindBy(id = "viewFile-1")
+    @FindBy(className = "view-file")
     private WebElement viewFirstFileListElement;
 
-    @FindBy(id = "deleteFile-1")
+    @FindBy(className = "delete-file")
     private WebElement deleteFirstFileListElement;
 
     public FilesPage(ChromeDriver driver) {
